@@ -13,7 +13,7 @@ using Vec2D = Vec2<double>;
 template <class T>
 struct Vec2 {
 
-Vec2(const T &x, const T &y) :
+constexpr Vec2(const T &x, const T &y) :
     x{x}, y{y}
 {}
 
