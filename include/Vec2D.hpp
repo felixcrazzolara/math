@@ -13,6 +13,15 @@ using Vec2D = Vec2<double>;
 template <class T>
 struct Vec2 {
 
+Vec2(const T &x, const T &y) :
+    x{x}, y{y}
+{}
+
+template <class U>
+Vec2(const Vec2<U> &a) :
+    x{a.x}, y{a.y}
+{}
+
 inline double Norm2() const {
     return std::sqrt( square(x) + square(y) );
 }
@@ -64,6 +73,12 @@ inline bool operator ==(const Vec2<U> &a) const {
 std::string toString() const;
 
 std::string toStringPolarDegree() const;
+
+inline Vec2<T>& round() {
+    x = std::round(x);
+    y = std::round(y);
+    return *this;
+}
 
 double x;
 double y;
