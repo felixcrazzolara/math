@@ -5,7 +5,13 @@
 
 #define square(x) ((x)*(x))
 
-struct Vec2D {
+template <class T>
+struct Vec2;
+
+using Vec2D = Vec2<double>;
+
+template <class T>
+struct Vec2 {
 
 inline double Norm2() const {
     return std::sqrt( square(x) + square(y) );
@@ -15,7 +21,8 @@ inline double Norm2Squared() const {
     return square(x) + square(y);
 }
 
-inline double dot(const Vec2D& a) const {
+template <class U>
+inline double dot(const Vec2<U> &a) const {
     return x*a.x + y*a.y;
 }
 
@@ -29,25 +36,28 @@ inline Vec2D from_polar() const {
     return Vec2D{x*std::cos(y),x*std::sin(y)};
 }
 
-inline Vec2D& operator +=(const Vec2D& a) {
+template <class U>
+inline Vec2<T>& operator +=(const Vec2<U> &a) {
     x += a.x;
     y += a.y;
     return *this;
 }
 
-inline Vec2D& operator -=(const Vec2D& a) {
+template <class U>
+inline Vec2<T>& operator -=(const Vec2<U> &a) {
     x -= a.x;
     y -= a.y;
     return *this;
 }
 
-inline Vec2D& operator /=(const double a) {
+inline Vec2<T>& operator /=(const double a) {
     x /= a;
     y /= a;
     return *this;
 }
 
-inline bool operator ==(const Vec2D& a) const {
+template <class U>
+inline bool operator ==(const Vec2<U> &a) const {
     return x == a.x && y == a.y;
 }
 
