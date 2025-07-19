@@ -19,7 +19,7 @@ Vec2(const T &x, const T &y) :
 
 template <class U>
 Vec2(const Vec2<U> &a) :
-    x{a.x}, y{a.y}
+    x{static_cast<T>(a.x)}, y{static_cast<T>(a.y)}
 {}
 
 inline double Norm2() const {
@@ -80,8 +80,8 @@ inline Vec2<T>& round() {
     return *this;
 }
 
-double x;
-double y;
+T x;
+T y;
 
 };
 

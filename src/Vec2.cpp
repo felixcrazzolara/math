@@ -1,4 +1,4 @@
-#include "Vec2D.hpp"
+#include "Vec2.hpp"
 
 template <class T>
 std::string Vec2<T>::toString() const {
