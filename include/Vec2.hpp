@@ -1,7 +1,8 @@
 #pragma once
 
-#include <string>
 #include <cmath>
+#include <string>
+#include <utility>
 
 #define square(x) ((x)*(x))
 
@@ -78,6 +79,10 @@ inline Vec2<T>& round() {
     x = std::round(x);
     y = std::round(y);
     return *this;
+}
+
+std::pair<T,T> pair() const {
+    return {x,y};
 }
 
 T x;

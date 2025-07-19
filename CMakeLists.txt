@@ -11,3 +11,4 @@ add_library(math SHARED
 target_include_directories(math
     PUBLIC include
 )
+
