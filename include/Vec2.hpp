@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <iostream>
 #include <string>
 #include <utility>
 
@@ -77,7 +78,7 @@ inline bool operator ==(const Vec2<U> &a) const {
     return x == a.x && y == a.y;
 }
 
-std::string Vec2<T>::to_string() const {
+std::string to_string() const {
     return "{" + std::to_string(x) + "," + std::to_string(y) + "}";
 }
 
@@ -121,4 +122,10 @@ inline Vec2D operator /(const Vec2D& a, const double& b) {
 
 inline Vec2D operator -(const Vec2D& a) {
     return Vec2D{-a.x,-a.y};
+}
+
+template <typename T>
+inline std::ostream& operator <<(std::ostream &out, const Vec2<T> &a) {
+    out << a.to_string();
+    return out;
 }
