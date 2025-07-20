@@ -100,8 +100,9 @@ T y;
 };
 
 template <typename T, typename U>
-inline Vec2<T> operator +(const Vec2<T> &a, const Vec2<U> &b) {
-    return Vec2<T>({a.x + b.x, a.y + b.y});
+inline Vec2<std::common_type_t<T, U>> operator +(const Vec2<T> &a, const Vec2<U> &b) {
+    using R = std::common_type_t<T, U>;
+    return Vec2<R>(a.x + b.x, a.y + b.y);
 }
 
 inline Vec2D operator -(const Vec2D& a, const Vec2D& b) {
