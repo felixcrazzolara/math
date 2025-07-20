@@ -67,13 +67,21 @@ inline Vec2<T>& operator /=(const double a) {
 }
 
 template <class U>
+requires std::is_arithmetic_v<U>
+inline Vec2<T> operator +(const U &a) const {
+    return Vec2<T>{x + a, y + a};
+}
+
+template <class U>
 inline bool operator ==(const Vec2<U> &a) const {
     return x == a.x && y == a.y;
 }
 
-std::string toString() const;
+std::string Vec2<T>::to_string() const {
+    return "{" + std::to_string(x) + "," + std::to_string(y) + "}";
+}
 
-std::string toStringPolarDegree() const;
+std::string to_string_polar_degree() const;
 
 inline Vec2<T>& round() {
     x = std::round(x);
