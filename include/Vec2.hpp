@@ -8,11 +8,13 @@
 #define square(x) ((x)*(x))
 
 template <class T>
+requires std::is_arithmetic_v<T>
 struct Vec2;
 
 using Vec2D = Vec2<double>;
 
 template <class T>
+requires std::is_arithmetic_v<T>
 struct Vec2 {
 
 constexpr Vec2(const T &x, const T &y) :
@@ -21,14 +23,14 @@ constexpr Vec2(const T &x, const T &y) :
 
 template <class U>
 Vec2(const Vec2<U> &a) :
-    x{static_cast<T>(a.x)}, y{static_cast<T>(a.y)}
+    x{a.x}, y{a.y}
 {}
 
-inline double Norm2() const {
+inline double L2() const {
     return std::sqrt( square(x) + square(y) );
 }
 
-inline double Norm2Squared() const {
+inline double L2_squared() const {
     return square(x) + square(y);
 }
 
@@ -38,7 +40,7 @@ inline double dot(const Vec2<U> &a) const {
 }
 
 inline Vec2D to_polar() const {
-    const double r   = this->Norm2();
+    const double r   = this->L2();
     const double phi = std::atan2(y,x);
     return Vec2D{r,phi};
 }
@@ -69,8 +71,23 @@ inline Vec2<T>& operator /=(const double a) {
 
 template <class U>
 requires std::is_arithmetic_v<U>
-inline Vec2<T> operator +(const U &a) const {
-    return Vec2<T>{x + a, y + a};
+inline Vec2<std::common_type_t<T, U>> operator +(const U &a) const {
+    using R = std::common_type_t<T, U>;
+    return Vec2<R>{x + a, y + a};
+}
+
+template <class U>
+requires std::is_arithmetic_v<U>
+inline Vec2<std::common_type_t<T, U>> operator *(const U &b) const {
+    using R = std::common_type_t<T, U>;
+    return Vec2<R>({x * b, y * b});
+}
+
+template <class U>
+requires std::is_arithmetic_v<U>
+inline Vec2<std::common_type_t<T, U>> operator /(const U &b) const {
+    using R = std::common_type_t<T, U>;
+    return Vec2<R>({x / b, y / b});
 }
 
 template <class U>
@@ -94,6 +111,11 @@ std::pair<T,T> pair() const {
     return {x,y};
 }
 
+template <typename U>
+inline Vec2<U> as() const {
+    return Vec2<U>{static_cast<U>(x), static_cast<U>(y)};
+}
+
 T x;
 T y;
 
@@ -105,20 +127,14 @@ inline Vec2<std::common_type_t<T, U>> operator +(const Vec2<T> &a, const Vec2<U>
     return Vec2<R>(a.x + b.x, a.y + b.y);
 }
 
-inline Vec2D operator -(const Vec2D& a, const Vec2D& b) {
-    return Vec2D({a.x-b.x, a.y-b.y});
-}
-
-inline Vec2D operator *(const Vec2D& a, const double& b) {
-    return Vec2D({a.x*b, a.y*b});
+template <typename T, typename U>
+inline Vec2<std::common_type_t<T, U>> operator -(const Vec2<T> &a, const Vec2<U> &b) {
+    using R = std::common_type_t<T, U>;
+    return Vec2<R>(a.x - b.x, a.y - b.y);
 }
 
 inline Vec2D operator *(const double& a, const Vec2D& b) {
     return Vec2D({a*b.x, a*b.y});
-}
-
-inline Vec2D operator /(const Vec2D& a, const double& b) {
-    return Vec2D({a.x/b, a.y/b});
 }
 
 inline Vec2D operator -(const Vec2D& a) {
