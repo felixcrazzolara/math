@@ -155,3 +155,5 @@ inline std::ostream& operator <<(std::ostream &out, const Vec2<T> &a) {
     out << a.to_string();
     return out;
 }
+
+#undef square
