@@ -17,6 +17,8 @@ template <class T>
 requires std::is_arithmetic_v<T>
 struct Vec2 {
 
+using type = T;
+
 constexpr Vec2(const T &x, const T &y) :
     x{x}, y{y}
 {}
@@ -112,8 +114,15 @@ std::pair<T,T> pair() const {
 }
 
 template <typename U>
+requires std::is_arithmetic_v<U>
 inline Vec2<U> as() const {
     return Vec2<U>{static_cast<U>(x), static_cast<U>(y)};
+}
+
+template <typename U, typename K = U::type>
+requires std::is_same_v<U, Vec2<K>>
+inline Vec2<K> as() const {
+    return Vec2<K>{static_cast<K>(x), static_cast<K>(y)};
 }
 
 T x;
