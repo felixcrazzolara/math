@@ -27,7 +27,7 @@ target_link_libraries(test_image
 )
 
 target_compile_definitions(math
-    PUBLIC SSE=1
+    PRIVATE SSE=1
 )
 
 target_compile_options(math
