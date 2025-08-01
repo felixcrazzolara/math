@@ -38,7 +38,6 @@ target_compile_definitions(test_image
     PRIVATE TEST_IMG_DIR="${CMAKE_CURRENT_SOURCE_DIR}/test_imgs/"
 )
 
-
 include(CTest)
 include(Catch)
 catch_discover_tests(test_image)
