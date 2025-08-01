@@ -8,10 +8,12 @@
 #include <filesystem>
 #include <iostream>
 #include <limits>
+#include <optional>
 
 std::atomic_flag fpng_was_initialized; // Initializes as false
 
-static void try_load_with_fpng(const std::string &file_path) {
+static std::optional<Image> try_load_with_fpng(const std::string &file_path) {
+    // Try to load the image
     std::vector<uint8_t> out;
     uint32_t width;
     uint32_t height;
@@ -20,8 +22,11 @@ static void try_load_with_fpng(const std::string &file_path) {
     const int ret = fpng::fpng_decode_file(file_path.c_str(), out, width, height, channels_in_file,
         desired_channels);
 
+    // Handle the return code
     if (ret == fpng::FPNG_DECODE_NOT_FPNG) {
-        return;
+        return std::nullopt;
+    } else if (ret == fpng::FPNG_DECODE_FAILED_NOT_PNG) {
+        return std::nullopt;
     } else {
         std::cerr << "Error in try_load_with_fpng: Got return code " << ret << std::endl;
         exit(-1);
@@ -42,7 +47,10 @@ Image Image::load(const std::string &file_path) {
     }
 
     // Try to load the image with fpng
-    try_load_with_fpng(file_path);
+    std::optional<Image> image = try_load_with_fpng(file_path);
+    if (image.has_value()) {
+        return image.value();
+    }
 
     // Load the image
     int x, y, n;
