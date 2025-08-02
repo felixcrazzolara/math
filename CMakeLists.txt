@@ -3,7 +3,11 @@ project(math)
 
 set(CMAKE_CXX_FLAGS "-O3 -std=c++2b")
 
-add_subdirectory(3rdparty/Catch2)
+option(BUILD_MATH_TESTS "Whether to build the tests of the math framework." ON)
+
+if (BUILD_MATH_TESTS)
+    add_subdirectory(3rdparty/Catch2)
+endif()
 add_subdirectory(3rdparty/fpng)
 
 add_library(math SHARED
@@ -18,15 +22,6 @@ target_include_directories(math
     PRIVATE 3rdparty/fpng/src
 )
 
-add_executable(test_image
-    tests/test_image.cpp
-)
-
-target_link_libraries(test_image
-    PRIVATE Catch2::Catch2WithMain
-    PRIVATE math
-)
-
 target_compile_definitions(math
     PRIVATE SSE=1
 )
@@ -35,10 +30,21 @@ target_compile_options(math
     PUBLIC -march=native -fno-strict-aliasing -mpclmul
 )
 
-target_compile_definitions(test_image
-    PRIVATE TEST_IMG_DIR="${CMAKE_CURRENT_SOURCE_DIR}/test_imgs/"
-)
+if (BUILD_MATH_TESTS)
+    add_executable(test_image
+        tests/test_image.cpp
+    )
 
-include(CTest)
-include(Catch)
-catch_discover_tests(test_image)
+    target_link_libraries(test_image
+        PRIVATE Catch2::Catch2WithMain
+        PRIVATE math
+    )
+
+    target_compile_definitions(test_image
+        PRIVATE TEST_IMG_DIR="${CMAKE_CURRENT_SOURCE_DIR}/test_imgs/"
+    )
+
+    include(CTest)
+    include(Catch)
+    catch_discover_tests(test_image)
+endif()
