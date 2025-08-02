@@ -64,10 +64,14 @@ Image Image::load(const std::string &file_path) {
         exit(-1);
     }
 
-    return Image{data, static_cast<uint32_t>(x), static_cast<uint32_t>(y), static_cast<uint8_t>(n)};
+    // Wrap the image
+    const ImageData image_data{data};
+
+    return Image{image_data, static_cast<uint32_t>(x), static_cast<uint32_t>(y),
+        static_cast<uint8_t>(n)};
 }
 
-Image::Image(unsigned char *data, const uint32_t &width, const uint32_t &height,
+Image::Image(const ImageData &data, const uint32_t &width, const uint32_t &height,
         const uint8_t &num_channels) :
     data_{data},
     width_{width},
@@ -75,9 +79,13 @@ Image::Image(unsigned char *data, const uint32_t &width, const uint32_t &height,
     num_channels_{num_channels}
 {}
 
-Image::~Image() {
-    if (data_) {
-        stbi_image_free(data_);
-        data_ = nullptr;
-    }
+Image::Image(const Image &img) :
+    data_{img.data_},
+    width_{img.width_},
+    height_{img.height_},
+    num_channels_{img.num_channels_}
+{}
+
+void export_stbi_image_free(void *retval_from_stbi_load) {
+    stbi_image_free(retval_from_stbi_load);
 }

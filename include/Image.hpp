@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ImageData.hpp"
+
 #include <string>
 #include <cstdint>
 
@@ -8,10 +10,10 @@ public:
 
 static Image load(const std::string &file_path);
 
-explicit Image(unsigned char *data, const uint32_t &width, const uint32_t &height,
+explicit Image(const ImageData &data, const uint32_t &width, const uint32_t &height,
     const uint8_t &num_channels);
 
-~Image();
+Image(const Image &img);
 
 inline uint32_t width() const noexcept {
     return width_;
@@ -25,9 +27,13 @@ inline uint8_t num_channels() const noexcept {
     return num_channels_;
 }
 
+inline const ImageData& data() const noexcept {
+    return data_;
+}
+
 private:
 
-unsigned char *data_;
+ImageData data_;
 const uint32_t width_;
 const uint32_t height_;
 const uint8_t num_channels_;

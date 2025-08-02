@@ -9,6 +9,7 @@ add_subdirectory(3rdparty/fpng)
 add_library(math SHARED
     3rdparty/fpng/src/fpng.cpp
     src/Image.cpp
+    src/ImageData.cpp
     src/Vec2.cpp
 )
 
