@@ -17,6 +17,10 @@ inline int32_t ref_count() const noexcept {
     return ref_cnt_->load();
 }
 
+inline unsigned char* data() const noexcept {
+    return data_;
+}
+
 private:
 
 unsigned char *data_;
